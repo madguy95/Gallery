@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/grouptitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:maxLength="20"
+        android:textSize="12sp" />
+
+    <GridView
+        android:id="@+id/gvGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:columnWidth="120dp"
+        android:horizontalSpacing="5dp"
+        android:numColumns="auto_fit"
+        android:overScrollMode="always"
+        android:verticalSpacing="5dp"></GridView>
+
+</LinearLayout>
