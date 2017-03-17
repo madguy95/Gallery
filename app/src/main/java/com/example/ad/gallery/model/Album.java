@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 /**
  * Created by AD on 08/03/2017.
- co ho tinh
  */
 
 public class Album {
