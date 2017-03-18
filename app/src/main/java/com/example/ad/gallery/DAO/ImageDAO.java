@@ -19,12 +19,12 @@ import java.util.HashMap;
 public class ImageDAO {
 
     String extention = ".jpg";
-    ArrayList<ImageItem> allImages = new ArrayList<>();
+
+    public HashMap<String, ArrayList<ImageItem>> albumMap = new HashMap<>();
 
     public ImageDAO() {
-        HashMap<String, ArrayList<ImageItem>> hm = new HashMap<>();
 
-        // get image from sdcard
+         //get image from sdcard
         File f = android.os.Environment.getExternalStorageDirectory();
         File[] files = f.listFiles();
         ArrayList<ImageItem> arrRoot = new ArrayList<>();
@@ -35,7 +35,7 @@ public class ImageDAO {
                 load_image_files(inFile, arr);
                 if (!arr.isEmpty()) {
                     String name = inFile.getName();
-                    hm.put(name, arr);
+                    albumMap.put(name, arr);
                 }
             } else {
                 if (inFile.getName().endsWith(extention)) {
@@ -48,7 +48,7 @@ public class ImageDAO {
             }
         }
         if (!arrRoot.isEmpty()) {
-            hm.put("Root", arrRoot);
+            albumMap.put("Root", arrRoot);
         }
 
     }
@@ -84,34 +84,12 @@ public class ImageDAO {
 
         String absolutePathOfImage = null, imageName;
 
-        //get all images from external storage
-
-        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
+        String albumName = "Camera";
         String[] projection = {MediaStore.MediaColumns.DATA,
                 MediaStore.Images.Media.DISPLAY_NAME};
 
-        cursor = activity.getContentResolver().query(uri, projection, null, null, null);
-
-        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
-        column_index_folder_name = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
-
-        while (cursor.moveToNext()) {
-
-            absolutePathOfImage = cursor.getString(column_index_data);
-
-            imageName = cursor.getString(column_index_folder_name);
-
-            ImageItem imageItem = new ImageItem();
-            imageItem.setTitle(imageName);
-            imageItem.setPath(absolutePathOfImage);
-            allImages.add(imageItem);
-
-        }
-
         // Get all Internal storage images
+        ArrayList<ImageItem> allImages = new ArrayList<>();
 
         uri = android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI;
 
@@ -135,6 +113,40 @@ public class ImageDAO {
             allImages.add(imageItem);
         }
 
+        albumMap.put(albumName, allImages);
+
+//        //get all images from external storage
+//
+//        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//        cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+//
+//        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+//
+//        column_index_folder_name = cursor
+//                .getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+//
+//        while (cursor.moveToNext()) {
+//
+//            absolutePathOfImage = cursor.getString(column_index_data);
+//
+//            imageName = cursor.getString(column_index_folder_name);
+//
+//            ImageItem imageItem = new ImageItem();
+//            imageItem.setTitle(imageName);
+//            imageItem.setPath(absolutePathOfImage);
+//            String albumNameEX = absolutePathOfImage.replace(android.os.Environment.getExternalStorageDirectory().getAbsolutePath(),"");
+//            albumNameEX = albumNameEX.substring(0,albumNameEX.indexOf("/"));
+//            if(albumNameEX.isEmpty()){
+//                albumNameEX = "Root";
+//            }
+//            if(albumMap.containsKey(albumNameEX)){
+//                albumMap.get(albumNameEX).add(imageItem);
+//            }else{
+//                ArrayList<ImageItem> arr = new ArrayList<>();
+//                arr.add(imageItem);
+//                albumMap.put(albumNameEX,arr);
+//            }
+//        }
         return allImages;
     }
 

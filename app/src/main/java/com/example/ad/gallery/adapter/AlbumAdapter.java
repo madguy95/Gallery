@@ -2,6 +2,9 @@ package com.example.ad.gallery.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +45,7 @@ public class AlbumAdapter extends ArrayAdapter {
 
         Album item = arrayList.get(position);
         imageTitle.setText(item.getName());
-        image.setImageBitmap(item.getImage());
+        image.setImageBitmap(resizeBitmap(item.getTitle(),image.getWidth(),image.getHeight()));
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,4 +56,23 @@ public class AlbumAdapter extends ArrayAdapter {
 
         return row;
     }
+    public Bitmap resizeBitmap(String photoPath, int targetW, int targetH) {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        int scaleFactor = 1;
+        if ((targetW > 0) || (targetH > 0)) {
+            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        }
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true; //Deprecated API 21
+
+        return BitmapFactory.decodeFile(photoPath, bmOptions);
+    }
+
 }

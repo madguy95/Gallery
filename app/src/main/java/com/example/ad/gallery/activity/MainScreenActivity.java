@@ -23,11 +23,14 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.example.ad.gallery.DAO.ImageDAO;
 import com.example.ad.gallery.model.Album;
 import com.example.ad.gallery.R;
 import com.example.ad.gallery.adapter.AlbumAdapter;
+import com.example.ad.gallery.model.ImageItem;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainScreenActivity extends AppCompatActivity {
 
@@ -38,45 +41,8 @@ public class MainScreenActivity extends AppCompatActivity {
     FloatingActionButton fab2;
     private GridView gridView;
     private AlbumAdapter gridAdapter;
+    ImageDAO imgDAO = new ImageDAO();
 
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                         int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
-    }
-
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +82,17 @@ public class MainScreenActivity extends AppCompatActivity {
 
             }
         });
-        gridView = (GridView) findViewById(R.id.gridview);
 
-        for (int i = 0; i < 11; i++) {
-            Album album = new Album("Album" + i, decodeSampledBitmapFromResource(getResources(), R.drawable.demoimage, 200, 200));
-            arr.add(album);
+        imgDAO.gettAllImages(this);
+
+        gridView = (GridView) findViewById(R.id.gridview);
+        for ( Map.Entry alb : imgDAO.albumMap.entrySet()) {
+            String key = alb.getKey().toString();
+            ArrayList<ImageItem> value = (ArrayList<ImageItem>) alb.getValue();
+            if(!value.isEmpty()) {
+                Album album = new Album(key, value.get(0).getPath());
+                arr.add(album);
+            }
         }
         gridAdapter = new AlbumAdapter(this, R.layout.grid_albumitem_layout, arr);
         gridView.setAdapter(gridAdapter);
@@ -130,6 +102,12 @@ public class MainScreenActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        imgDAO.gettAllImages(this);
     }
 
     void inputAlbum() {
@@ -147,7 +125,7 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                Album album = new Album(m_Text, decodeSampledBitmapFromResource(getResources(), R.drawable.demoimage, 200, 200));
+                Album album = new Album(m_Text, null);
                 arr.add(album);
                 gridAdapter.notifyDataSetChanged();
 
@@ -198,5 +176,43 @@ public class MainScreenActivity extends AppCompatActivity {
 //            ImageView imageview = (ImageView) findViewById(R.id.ImageView01);
 //            imageview.setImageBitmap(image);
         }
+    }
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }

@@ -9,14 +9,14 @@ import android.graphics.Bitmap;
 public class Album {
 
     private String name;
-    private Bitmap image;
+    private String title;
 
     public Album() {
     }
 
-    public Album(String name, Bitmap image) {
+    public Album(String name, String title) {
         this.name = name;
-        this.image = image;
+        this.title = title;
     }
 
     public String getName() {
@@ -27,11 +27,11 @@ public class Album {
         this.name = name;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getTitle() {
+        return title;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
