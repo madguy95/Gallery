@@ -24,9 +24,9 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.example.ad.gallery.DAO.ImageDAO;
-import com.example.ad.gallery.model.Album;
 import com.example.ad.gallery.R;
 import com.example.ad.gallery.adapter.AlbumAdapter;
+import com.example.ad.gallery.model.Album;
 import com.example.ad.gallery.model.ImageItem;
 
 import java.util.ArrayList;
@@ -86,10 +86,10 @@ public class MainScreenActivity extends AppCompatActivity {
         imgDAO.gettAllImages(this);
 
         gridView = (GridView) findViewById(R.id.gridview);
-        for ( Map.Entry alb : imgDAO.albumMap.entrySet()) {
+        for (Map.Entry alb : imgDAO.albumMap.entrySet()) {
             String key = alb.getKey().toString();
             ArrayList<ImageItem> value = (ArrayList<ImageItem>) alb.getValue();
-            if(!value.isEmpty()) {
+            if (!value.isEmpty()) {
                 Album album = new Album(key, value.get(0).getPath());
                 arr.add(album);
             }
@@ -177,6 +177,7 @@ public class MainScreenActivity extends AppCompatActivity {
 //            imageview.setImageBitmap(image);
         }
     }
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
 
