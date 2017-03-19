@@ -2,6 +2,9 @@ package com.example.ad.gallery.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +39,14 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         //
         ImageItem item = data.get(position);
         //
-        TextView imageTitle = (TextView) row.findViewById(R.id.text);
-        ImageView image = (ImageView) row.findViewById(R.id.image);
-        imageTitle.setText(item.getTitle());
-        imageTitle.setText("");
-        image.setImageBitmap(item.getImage());
+        //TextView imageTitle = (TextView) row.findViewById(R.id.text);
+        ImageView image = (ImageView) row.findViewById(R.id.imageView);
+        //
+        //imageTitle.setText(item.getTitle());
+        //imageTitle.setText("");
+        //Log.e("ImageAdapter", "Item : " +position + ":\n\t"+ item.getPath());
+        image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,5 +56,23 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         });
         //
         return row;
+    }
+    public Bitmap resizeBitmap(String photoPath, int targetW, int targetH) {
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        int scaleFactor = 2;
+        if ((targetW > 0) || (targetH > 0)) {
+            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        }
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true; //Deprecated API 21
+
+        return BitmapFactory.decodeFile(photoPath, bmOptions);
     }
 }

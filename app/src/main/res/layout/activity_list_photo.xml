@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.ad.gallery.activity.ListPhotoActivity">
 
-    <ListView
-        android:id="@+id/listView"
+    <GridView
+        android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:numColumns="4" />
 
 </RelativeLayout>
