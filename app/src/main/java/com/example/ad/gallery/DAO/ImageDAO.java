@@ -1,7 +1,10 @@
 package com.example.ad.gallery.DAO;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -13,6 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by AD on 15/03/2017.
@@ -26,32 +31,8 @@ public class ImageDAO {
 
     public ImageDAO() {
 
-         //get image from sdcard
-        File f = android.os.Environment.getExternalStorageDirectory();
-        File[] files = f.listFiles();
-        ArrayList<ImageItem> arrRoot = new ArrayList<>();
-        for (File inFile : files) {
-            if (inFile.isDirectory()) {
-                // is directory
-                ArrayList<ImageItem> arr = new ArrayList<>();
-                load_image_files(inFile, arr);
-                if (!arr.isEmpty()) {
-                    String name = inFile.getName();
-                    albumMap.put(name, arr);
-                }
-            } else {
-                if (inFile.getName().endsWith(extention)) {
-                    ImageItem imageItem = new ImageItem();
-                    imageItem.setTitle(inFile.getName());
-                    imageItem.setDate(new Date(inFile.lastModified()));
-                    imageItem.setPath(inFile.getAbsolutePath());
-                    arrRoot.add(imageItem);
-                }
-            }
-        }
-        if (!arrRoot.isEmpty()) {
-            albumMap.put("Root", arrRoot);
-        }
+        //get image from sdcard
+
 
     }
 
@@ -117,6 +98,34 @@ public class ImageDAO {
 
         albumMap.put(albumName, allImages);
 
+        // get all image from external storage
+        File f = android.os.Environment.getExternalStorageDirectory();
+        File[] files = f.listFiles();
+        ArrayList<ImageItem> arrRoot = new ArrayList<>();
+        if (files != null)
+            for (File inFile : files) {
+                if (inFile.isDirectory()) {
+                    // is directory
+                    ArrayList<ImageItem> arr = new ArrayList<>();
+                    load_image_files(inFile, arr);
+                    if (!arr.isEmpty()) {
+                        String name = inFile.getName();
+                        albumMap.put(name, arr);
+                    }
+                } else {
+                    if (inFile.getName().endsWith(extention)) {
+                        ImageItem imageItem = new ImageItem();
+                        imageItem.setTitle(inFile.getName());
+                        imageItem.setDate(new Date(inFile.lastModified()));
+                        imageItem.setPath(inFile.getAbsolutePath());
+                        arrRoot.add(imageItem);
+                    }
+                }
+            }
+        if (!arrRoot.isEmpty()) {
+            albumMap.put("Root", arrRoot);
+        }
+
 //        //get all images from external storage
 //
 //        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -151,8 +160,9 @@ public class ImageDAO {
 //        }
         return allImages;
     }
-    String ReadExif(String file){
-        String exif="Exif: " + file;
+
+    String ReadExif(String file) {
+        String exif = "Exif: " + file;
         try {
             ExifInterface exifInterface = new ExifInterface(file);
 
@@ -183,4 +193,22 @@ public class ImageDAO {
         return exif;
     }
 
+    // get location image follow latitude and longitude
+    public static String getCountryName(Context context, double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            Address result;
+
+            if (addresses != null && !addresses.isEmpty()) {
+                return addresses.get(0).getCountryName();
+            }
+            return null;
+        } catch (IOException ignored) {
+            //do something
+        }
+
+        return null;
+    }
 }
