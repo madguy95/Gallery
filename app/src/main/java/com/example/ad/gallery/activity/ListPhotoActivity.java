@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.ad.gallery.DAO.ImageDAO;
 import com.example.ad.gallery.adapter.AlbumAdapter;
 import com.example.ad.gallery.adapter.ImageAdapter;
 import com.example.ad.gallery.model.GroupImages;
@@ -48,27 +49,12 @@ public class ListPhotoActivity extends AppCompatActivity {
      * Prepare some dummy data for gridview
      */
     private ArrayList<ImageItem> getData() {
-        final ArrayList<ImageItem> imageItems = new ArrayList<>();
-        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-        //
-        int j = 0, group_count = 0;
-        String path = "/storage/emulated/0/Pictures/Screenshots/IMG_20170319_155302.jpg";
-        for (int i = 0; i < imgs.length(); i++) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            ImageItem item = new ImageItem(bitmap, "Image#" + i);
-            item.setPath(path);
-            //
-            j++;
-            if (j == 5) {
-                j = 0;
-                group_count++;
-            }
-            item.setLocation("Location " + group_count);
-            //
-            imageItems.add(item);
-        }
+        String albumName = getIntent().getStringExtra(MainScreenActivity.ALBUM_NAME);
+        ImageDAO imageDAO = new ImageDAO();
+        imageDAO.gettAllImages(this);
+        ArrayList<ImageItem> value = (ArrayList<ImageItem>) imageDAO.albumMap.get(albumName);
         Log.i(className, "Load data succesfull");
-        return imageItems;
+        return value;
     }
 
     private void DispayGroup() {

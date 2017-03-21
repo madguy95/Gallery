@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class MainScreenActivity extends AppCompatActivity {
-
+    public final static String ALBUM_NAME = "AlbumName";
     int CAMERA_PIC_REQUEST = 1001;
     ArrayList<Album> arr = new ArrayList<>();
     String m_Text;

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ad.gallery.activity.MainScreenActivity;
 import com.example.ad.gallery.model.Album;
 import com.example.ad.gallery.R;
 import com.example.ad.gallery.activity.ListPhotoActivity;
@@ -50,6 +51,7 @@ public class AlbumAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ListPhotoActivity.class);
+                intent.putExtra(MainScreenActivity.ALBUM_NAME, item.getName());
                 context.startActivity(intent);
             }
         });
