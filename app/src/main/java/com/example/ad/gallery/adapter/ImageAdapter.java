@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
+import android.media.ThumbnailUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,10 +44,22 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         //TextView imageTitle = (TextView) row.findViewById(R.id.text);
         ImageView image = (ImageView) row.findViewById(R.id.imageView);
         //
-        //imageTitle.setText(item.getTitle());
-        //imageTitle.setText("");
-        //Log.e("ImageAdapter", "Item : " +position + ":\n\t"+ item.getPath());
-        image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
+        Log.i("ImageAdapter", "Item : " +position + ":\n\t"+ item.getPath());
+        String extention = ".jpg";
+        if (item.getPath().endsWith(extention)) {
+            image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
+        } else {
+            // Set Image of Video :
+            try {
+
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(item.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+                thumb = ThumbnailUtils.extractThumbnail(thumb, image.getWidth(),image.getHeight(), ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+                image.setImageBitmap(thumb);
+            } catch (Exception ex) {
+                Log.e("ImageAdapter", "", ex);
+            }
+        }
+
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override

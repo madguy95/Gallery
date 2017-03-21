@@ -44,7 +44,7 @@ public class AlbumAdapter extends ArrayAdapter {
         TextView imageTitle = (TextView) row.findViewById(R.id.text);
         ImageView image = (ImageView) row.findViewById(R.id.imageView);
 
-        Album item = arrayList.get(position);
+        final Album item = arrayList.get(position);
         imageTitle.setText(item.getName());
         image.setImageBitmap(resizeBitmap(item.getTitle(),image.getWidth(),image.getHeight()));
         row.setOnClickListener(new View.OnClickListener() {
