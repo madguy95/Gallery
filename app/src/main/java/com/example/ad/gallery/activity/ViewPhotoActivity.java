@@ -94,9 +94,6 @@ public class ViewPhotoActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.action_detail){
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("PATH",path);
-            startActivity(intent);
 
            return true;
         }
