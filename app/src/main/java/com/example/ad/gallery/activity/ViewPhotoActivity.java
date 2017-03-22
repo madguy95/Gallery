@@ -175,7 +175,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             ImageView img = (ImageView) rootView.findViewById(R.id.imageViewLD);
-            img.setImageBitmap(BitmapFactory.decodeFile(path, null));
+            img.setImageBitmap(BitmapFactory.decodeFile(path));
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
