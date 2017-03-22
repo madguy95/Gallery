@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,8 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
     private Context context;
     private int layoutResourceId;
     private ArrayList<ImageItem> data = new ArrayList<ImageItem>();
+
+    public static boolean checked = false;
 
     public ImageAdapter(Context context, int layoutResourceId, ArrayList<ImageItem> data) {
         super(context, layoutResourceId, data);
@@ -52,6 +55,13 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         Log.i("ImageAdapter", "Item : " +position + ":\n\t"+ item.getPath());
         String extention = ".jpg";
         if (item.getPath().endsWith(extention)) {
+            if(checked){
+                CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
+                cb.setVisibility(View.VISIBLE);
+            }else {
+                CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
+                cb.setVisibility(View.INVISIBLE);
+            }
             image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
         } else {
             // Set Image of Video :
