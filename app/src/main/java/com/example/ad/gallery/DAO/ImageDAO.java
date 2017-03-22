@@ -8,13 +8,18 @@ import android.location.Geocoder;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.example.ad.gallery.model.ImageItem;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -110,6 +115,7 @@ public class ImageDAO {
                     load_image_files(inFile, arr);
                     if (!arr.isEmpty()) {
                         String name = inFile.getName();
+                        allImages.addAll(arr);
                         albumMap.put(name, arr);
                     }
                 } else {
@@ -119,6 +125,7 @@ public class ImageDAO {
                         imageItem.setDate(new Date(inFile.lastModified()));
                         imageItem.setPath(inFile.getAbsolutePath());
                         arrRoot.add(imageItem);
+                        allImages.add(imageItem);
                     }
                 }
             }
@@ -211,4 +218,47 @@ public class ImageDAO {
 
         return null;
     }
+
+    //
+    public void getAlbumByTime(Activity activity) {
+        ArrayList<ImageItem>  allImages = gettAllImages(activity);
+        //Sort by date time
+        Collections.sort(allImages, new Comparator<ImageItem>() {
+            @Override
+            public int compare(ImageItem imageItem, ImageItem t1) {
+                try {
+                    return imageItem.getDate().compareTo(t1.getDate());
+                } catch (Exception ex) {
+                    Log.e("DAO", "Compare date fail", ex);
+                    return 0;
+                }
+            }
+        });
+        // Group to HashMap
+        albumMap = new HashMap<>();
+        ArrayList<ImageItem> arrOfKey = new ArrayList<>();
+        for (ImageItem item : allImages) {
+            if (arrOfKey.size() == 0) {
+                arrOfKey.add(item);
+            } else {
+                if (!item.isSameGroup(arrOfKey.get(0), 0)) {
+                    SimpleDateFormat df = new SimpleDateFormat(yyyy, MMM);
+                    String key = df.format(arrOfKey.get(0).getDate());
+                    //
+                    albumMap.put(key, arrOfKey);
+                    //
+                    arrOfKey = new ArrayList<>();
+                }
+                arrOfKey.add(item);
+            }
+        }
+        if (arrOfKey.size() > 0) {
+            SimpleDateFormat df = new SimpleDateFormat(yyyy, MMM);
+            String key = df.format(arrOfKey.get(0).getDate());
+            //
+            albumMap.put(key, arrOfKey);
+        }
+    }
+
+
 }
