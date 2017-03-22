@@ -40,17 +40,18 @@ public class AlbumAdapter extends ArrayAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View row = inflater.inflate(layoutResourceId, parent, false);
-        TextView imageTitle = (TextView) row.findViewById(R.id.text);
-        ImageView image = (ImageView) row.findViewById(R.id.imageView);
+        TextView imageTitle = (TextView) row.findViewById(R.id.txtAlbum);
+        ImageView image = (ImageView) row.findViewById(R.id.albumview);
 
         final Album item = arrayList.get(position);
         imageTitle.setText(item.getName());
-        image.setImageBitmap(resizeBitmap(item.getTitle(),image.getWidth(),image.getHeight()));
+        image.setImageBitmap(resizeBitmap(item.getTitle(),image.getWidth(),image.getWidth()));
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ListPhotoActivity.class);
                 intent.putExtra(MainScreenActivity.ALBUM_NAME, item.getName());
+                intent.putExtra(MainScreenActivity.KIND_ALBUM, item.getName());
                 context.startActivity(intent);
             }
         });

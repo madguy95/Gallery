@@ -1,5 +1,7 @@
 package com.example.ad.gallery.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +33,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
     static View vdecoder;
     static Toolbar toolbar;
     static ActionBar actionBar;
-
+    static String path;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -42,8 +44,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewphoto);
 
-
-
+        path = getIntent().getStringExtra("PATH");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -129,7 +130,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             ImageView img = (ImageView) rootView.findViewById(R.id.imageViewLD);
-            img.setImageResource(R.drawable.demoimage);
+            img.setImageBitmap(BitmapFactory.decodeFile(path, null));
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

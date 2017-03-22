@@ -39,7 +39,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layoutResourceId, parent, false);
         //
-        ImageItem item = data.get(position);
+        final ImageItem item = data.get(position);
         //
         //TextView imageTitle = (TextView) row.findViewById(R.id.text);
         ImageView image = (ImageView) row.findViewById(R.id.imageView);
@@ -51,7 +51,6 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         } else {
             // Set Image of Video :
             try {
-
                 Bitmap thumb = ThumbnailUtils.createVideoThumbnail(item.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
                 thumb = ThumbnailUtils.extractThumbnail(thumb, image.getWidth(),image.getHeight(), ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
                 image.setImageBitmap(thumb);
@@ -65,6 +64,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewPhotoActivity.class);
+                intent.putExtra("PATH",item.getPath());
                 context.startActivity(intent);
             }
         });

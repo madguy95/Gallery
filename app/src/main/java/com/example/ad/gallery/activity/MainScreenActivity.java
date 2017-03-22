@@ -35,6 +35,7 @@ import java.util.Map;
 public class MainScreenActivity extends AppCompatActivity {
 
     public final static String ALBUM_NAME = "AlbumName";
+    public final static String KIND_ALBUM = "AlbumName";
     int CAMERA_PIC_REQUEST = 1001;
     ArrayList<Album> arr = new ArrayList<>();
     ArrayList<Album> arrLocation = new ArrayList<>();
@@ -87,6 +88,7 @@ public class MainScreenActivity extends AppCompatActivity {
                         setDataToGridView(arrLocation);
                         break;
                     case 3:
+                        getAlbumTime();
                         break;
                     case 4:
                         break;
@@ -121,7 +123,19 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
     }
-
+    void getAlbumTime(){
+        imgDAO.getAlbumByTime(this);
+        arr.clear();
+        for (Map.Entry alb : imgDAO.albumMap.entrySet()) {
+            String key = alb.getKey().toString();
+            ArrayList<ImageItem> value = (ArrayList<ImageItem>) alb.getValue();
+            if (!value.isEmpty()) {
+                Album album = new Album(key, value.get(0).getPath());
+                arr.add(album);
+            }
+        }
+        setDataToGridView(arr);
+    }
     void setDataToGridView(ArrayList<Album> arrAlbum) {
         gridAdapter = new AlbumAdapter(this, R.layout.grid_albumitem_layout, arrAlbum);
         gridAdapter.notifyDataSetChanged();
@@ -149,7 +163,7 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                Album album = new Album(m_Text, null);
+                Album album = new Album(m_Text, arr.get(0).getTitle());
                 arr.add(album);
                 gridAdapter.notifyDataSetChanged();
 

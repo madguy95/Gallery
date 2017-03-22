@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -45,13 +46,27 @@ public class ListPhotoActivity extends AppCompatActivity {
         DispayGroup();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Prepare some dummy data for gridview
      */
     private ArrayList<ImageItem> getData() {
         String albumName = getIntent().getStringExtra(MainScreenActivity.ALBUM_NAME);
         ImageDAO imageDAO = new ImageDAO(this);
-        imageDAO.getAllImages(this);
+        if (albumName.contains(",")) {
+            imageDAO.getAlbumByTime(this);
+        } else
+        {
+            imageDAO.getAllImages(this);
+        }
         ArrayList<ImageItem> value = (ArrayList<ImageItem>) imageDAO.albumMap.get(albumName);
         Log.i(className, "Load data succesfull");
         return value;
