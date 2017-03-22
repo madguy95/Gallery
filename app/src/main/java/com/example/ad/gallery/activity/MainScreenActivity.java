@@ -38,7 +38,7 @@ import java.util.Map;
 public class MainScreenActivity extends AppCompatActivity {
 
     public final static String ALBUM_NAME = "AlbumName";
-    public final static String KIND_ALBUM = "AlbumName";
+    public final static String KIND_ALBUM = "KindName";
     int CAMERA_PIC_REQUEST = 1001;
     ArrayList<Album> arr = new ArrayList<>();
     String m_Text;
@@ -163,6 +163,12 @@ public class MainScreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         imgDAO.getAllImages(this);
+        getAllAlbum();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 
     void inputAlbum() {
@@ -210,6 +216,11 @@ public class MainScreenActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(id == R.id.action_select){
+            AlbumAdapter.checked = !AlbumAdapter.checked;
+            gridAdapter.notifyDataSetChanged();
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;

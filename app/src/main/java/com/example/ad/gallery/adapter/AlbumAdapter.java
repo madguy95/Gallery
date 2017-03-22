@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class AlbumAdapter extends ArrayAdapter {
     private int layoutResourceId;
     private ArrayList<Album> arrayList = new ArrayList<>();
     static int defaultImage = drawable.ic_action_icon;
+    public static boolean checked = false;
     public AlbumAdapter(Context context, int resource, ArrayList<Album> objects) {
         super(context, resource, objects);
         this.context = context;
@@ -45,7 +47,13 @@ public class AlbumAdapter extends ArrayAdapter {
         View row = inflater.inflate(layoutResourceId, parent, false);
         TextView imageTitle = (TextView) row.findViewById(id.txtAlbum);
         ImageView image = (ImageView) row.findViewById(id.albumView);
-
+        if(checked){
+            CheckBox cb = (CheckBox) row.findViewById(id.cbAlbum);
+            cb.setVisibility(View.VISIBLE);
+        }else {
+            CheckBox cb = (CheckBox) row.findViewById(id.cbAlbum);
+            cb.setVisibility(View.INVISIBLE);
+        }
         final Album item = arrayList.get(position);
         imageTitle.setText(item.getName());
         if(item.getTitle()!= null) {

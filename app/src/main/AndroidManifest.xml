@@ -31,11 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.ViewPhotoActivity"
             android:label="@string/title_activity_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.ListPhotoActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -51,9 +50,10 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".ListImageActivity"
+            android:label="@string/title_activity_list_image"></activity>
     </application>
 
 </manifest>
