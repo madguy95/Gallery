@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import com.example.ad.gallery.R;
 import com.example.ad.gallery.adapter.AlbumAdapter;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ViewPhotoActivity extends AppCompatActivity {
 
@@ -92,55 +94,98 @@ public class ViewPhotoActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if(id == R.id.action_detail){
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("PATH",path);
-            startActivity(intent);
-
-           return true;
-        }
-
-        if(id == R.id.action_delete){
-
-            AlertDialog.Builder adb = new AlertDialog.Builder(this);
-            adb.setMessage("Are you sure to delete?");
-            adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    File file = new File(path);
-                    boolean deleted = file.delete();
-                    if (deleted) {
-                        MainScreenActivity.gridAdapter.notifyDataSetChanged();
-                        ListPhotoActivity.gridAdapter.notifyDataSetChanged();
-                        Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Delete fail", Toast.LENGTH_SHORT).show();
+        try {
+            int id = item.getItemId();
+            if (id == R.id.action_detail) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setMessage(ViewPhotoActivity.readExif(path));
+                adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                     }
-                }
-            });
-            adb.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            adb.create().show();
+                });
+                adb.create().show();
 
-            return true;
-        }
+                return true;
+            }
 
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
+            if (id == R.id.action_delete) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setMessage("Are you sure to delete?");
+                adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File file = new File(path);
+                        boolean deleted = file.delete();
+                        if (deleted) {
+                            MainScreenActivity.gridAdapter.notifyDataSetChanged();
+                            ListPhotoActivity.gridAdapter.notifyDataSetChanged();
+                            Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Delete fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                adb.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                adb.create().show();
+
+                return true;
+            }
+
+            if (id == android.R.id.home) {
+                finish();
+                return true;
+            }
+
+            //noinspection SimplifiableIfStatement
+            if (id == R.id.action_settings) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    static String readExif(String file) {
+        String exif = "Exif: " + file;
+        try {
+            ExifInterface exifInterface = new ExifInterface(file);
+
+            exif += "\nIMAGE_LENGTH: " + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            exif += "\nIMAGE_WIDTH: " + exifInterface.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+            exif += "\n DATETIME: " + exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+            exif += "\n TAG_MAKE: " + exifInterface.getAttribute(ExifInterface.TAG_MAKE);
+            exif += "\n TAG_MODEL: " + exifInterface.getAttribute(ExifInterface.TAG_MODEL);
+            exif += "\n TAG_ORIENTATION: " + exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION);
+            exif += "\n TAG_WHITE_BALANCE: " + exifInterface.getAttribute(ExifInterface.TAG_WHITE_BALANCE);
+            exif += "\n TAG_FOCAL_LENGTH: " + exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+            exif += "\n TAG_FLASH: " + exifInterface.getAttribute(ExifInterface.TAG_FLASH);
+            exif += "\nGPS related:";
+            exif += "\n TAG_GPS_DATESTAMP: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_DATESTAMP);
+            exif += "\n TAG_GPS_TIMESTAMP: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
+            exif += "\n TAG_GPS_LATITUDE: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+            exif += "\n TAG_GPS_LATITUDE_REF: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+            exif += "\n TAG_GPS_LONGITUDE: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+            exif += "\n TAG_GPS_LONGITUDE_REF: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
+            exif += "\n TAG_GPS_PROCESSING_METHOD: " + exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);
+
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return exif;
     }
 
     /**

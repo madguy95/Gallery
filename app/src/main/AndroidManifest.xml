@@ -54,7 +54,6 @@
         <activity
             android:name=".ListImageActivity"
             android:label="@string/title_activity_list_image" />
-        <activity android:name=".activity.DetailActivity"></activity>
     </application>
 
 </manifest>
