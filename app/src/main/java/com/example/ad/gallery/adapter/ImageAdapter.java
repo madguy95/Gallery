@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.media.ThumbnailUtils;
 import android.util.Log;
@@ -18,7 +20,10 @@ import com.example.ad.gallery.model.ImageItem;
 import com.example.ad.gallery.R;
 import com.example.ad.gallery.activity.ViewPhotoActivity;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ImageAdapter extends ArrayAdapter<ImageItem> {
 
@@ -54,6 +59,14 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(item.getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 image.setImageBitmap(thumbnail);
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//use one of overloaded setDataSource() functions to set your data source
+                retriever.setDataSource(context, Uri.fromFile(new File(item.getPath())));
+                String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                long timeInMillisec = Long.parseLong(time );
+                TextView txtVideo = (TextView) row.findViewById(R.id.txtVideo);
+                txtVideo.setText((new SimpleDateFormat("mm:ss:SS")).format(new Date(timeInMillisec)));
+                txtVideo.setVisibility(View.VISIBLE);
             } catch (Exception ex) {
                 Log.e("ImageAdapter", "", ex);
             }
