@@ -15,10 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.ad.gallery.R;
-import com.example.ad.gallery.adapter.AlbumAdapter;
 import com.example.ad.gallery.adapter.FullscreenImageAdapter;
-import com.example.ad.gallery.adapter.ImageAdapter;
-import com.example.ad.gallery.model.ImageItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +34,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
     public static View vdecoder;
     static Toolbar toolbar;
     static ActionBar actionBar;
-    static int position;
+    public static int position;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -65,7 +62,9 @@ public class ViewPhotoActivity extends AppCompatActivity {
         // Set up the ViewPager with adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(adapter);
-        mViewPager.setCurrentItem(position);
+        if (position > -1) {
+            mViewPager.setCurrentItem(position);
+        }
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -93,9 +92,11 @@ public class ViewPhotoActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         try {
+            final String currentImagePath = ListPhotoActivity.data.get(mViewPager.getCurrentItem()).getPath();
+
             if (id == R.id.action_detail) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
-                adb.setMessage(ViewPhotoActivity.readExif(ListPhotoActivity.data.get(position).getPath()));
+                adb.setMessage(ViewPhotoActivity.readExif(currentImagePath));
                 adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -113,7 +114,7 @@ public class ViewPhotoActivity extends AppCompatActivity {
                 adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        File file = new File(ListPhotoActivity.data.get(position).getPath());
+                        File file = new File(currentImagePath);
                         boolean deleted = file.delete();
                         if (deleted) {
                             MainScreenActivity.gridAdapter.notifyDataSetChanged();

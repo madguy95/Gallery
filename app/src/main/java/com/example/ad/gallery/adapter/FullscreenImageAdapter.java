@@ -44,8 +44,6 @@ public class FullscreenImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        final RelativeLayout bottomButtons;
-
         inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.fragment_viewphoto, container, false);
