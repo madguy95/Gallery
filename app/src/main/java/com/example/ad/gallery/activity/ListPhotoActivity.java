@@ -1,8 +1,11 @@
 package com.example.ad.gallery.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.ad.gallery.DAO.ImageDAO;
 import com.example.ad.gallery.R;
+import com.example.ad.gallery.adapter.AlbumAdapter;
 import com.example.ad.gallery.adapter.ImageAdapter;
 import com.example.ad.gallery.model.ImageItem;
 
@@ -38,9 +42,21 @@ public class ListPhotoActivity extends AppCompatActivity {
         //
         DispayGroup();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.memu_listphoto, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_selectImage){
+            // code show checkbox here
+            return true;
+        }
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
@@ -98,4 +114,5 @@ public class ListPhotoActivity extends AppCompatActivity {
         //
         Log.i(className, "Display data succesfull");
     }
+
 }

@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.ad.gallery.activity.ListPhotoActivity">
 
-    <item
-        android:id="@+id/action_camera"
-        android:icon="@drawable/ic_action_camera"
-        android:orderInCategory="101"
-        android:title="@string/action_camera"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/action_camera"-->
+        <!--android:icon="@drawable/ic_action_camera"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/action_camera"-->
+        <!--app:showAsAction="always" />-->
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="102"
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_select"
+        android:id="@+id/action_selectImage"
         android:title="@string/select" />
 
 </menu>
