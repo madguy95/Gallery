@@ -41,7 +41,6 @@ public class MainScreenActivity extends AppCompatActivity {
     public final static String KIND_ALBUM = "AlbumName";
     int CAMERA_PIC_REQUEST = 1001;
     ArrayList<Album> arr = new ArrayList<>();
-    ArrayList<Album> arrLocation = new ArrayList<>();
     String m_Text;
     FloatingActionButton fab;
     FloatingActionButton fab2;
@@ -60,7 +59,6 @@ public class MainScreenActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         imgDAO = new ImageDAO(this);
-        imgDAO.getAllImages(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,12 +81,12 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        setDataToGridView(arr);
+                        getAllAlbum();
                         break;
                     case 1:
                         break;
                     case 2:
-                        setDataToGridView(arrLocation);
+                        setDataToGridView(arr);
                         break;
                     case 3:
                         getAlbumTime();
@@ -102,7 +100,6 @@ public class MainScreenActivity extends AppCompatActivity {
                         "you selected: " + position,
                         Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -110,6 +107,17 @@ public class MainScreenActivity extends AppCompatActivity {
         });
 
         gridView = (GridView) findViewById(R.id.gridViewAlbum);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void getAllAlbum(){
+        imgDAO.getAllImages(this);
+        arr.clear();
         for (Map.Entry alb : imgDAO.albumMap.entrySet()) {
             String key = alb.getKey().toString();
             ArrayList<ImageItem> value = (ArrayList<ImageItem>) alb.getValue();
@@ -130,14 +138,7 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         }
         setDataToGridView(arr);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
-
     void getAlbumTime() {
         imgDAO.getAlbumByTime(this);
         arr.clear();

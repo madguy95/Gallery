@@ -66,7 +66,7 @@ public class ImageDAO {
     }
 
     public ArrayList<ImageItem> getAllImages(Activity activity) {
-
+        albumMap.clear();
         //Remove older images to avoid copying same image twice
         Uri uri;
         Cursor cursor;
