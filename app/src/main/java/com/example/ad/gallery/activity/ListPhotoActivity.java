@@ -1,8 +1,5 @@
 package com.example.ad.gallery.activity;
 
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,16 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ad.gallery.DAO.ImageDAO;
-import com.example.ad.gallery.adapter.AlbumAdapter;
-import com.example.ad.gallery.adapter.ImageAdapter;
-import com.example.ad.gallery.model.GroupImages;
-import com.example.ad.gallery.model.ImageItem;
 import com.example.ad.gallery.R;
-import com.example.ad.gallery.adapter.GroupAdapter;
+import com.example.ad.gallery.adapter.ImageAdapter;
+import com.example.ad.gallery.model.ImageItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +41,7 @@ public class ListPhotoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
         }
@@ -61,10 +54,11 @@ public class ListPhotoActivity extends AppCompatActivity {
     private ArrayList<ImageItem> getData() {
         String albumName = getIntent().getStringExtra(MainScreenActivity.ALBUM_NAME);
         ImageDAO imageDAO = new ImageDAO(this);
-        if (albumName.contains(",")) {
+        if (albumName.equals("VIDEO")) {
+            return imageDAO.getAllMedia();
+        } else if (albumName.contains(",")) {
             imageDAO.getAlbumByTime(this);
-        } else
-        {
+        } else {
             imageDAO.getAllImages(this);
         }
         ArrayList<ImageItem> value = (ArrayList<ImageItem>) imageDAO.albumMap.get(albumName);

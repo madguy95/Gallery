@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -283,5 +284,24 @@ public class ImageDAO {
         }
     }
 
+    public ArrayList<ImageItem> getAllMedia() {
+        HashSet<ImageItem> videoItemHashSet = new HashSet<>();
+        String[] projection = { MediaStore.Video.VideoColumns.DATA ,MediaStore.Video.Media.DISPLAY_NAME};
+        Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+        try {
+            cursor.moveToFirst();
+            do{
+                ImageItem im = new ImageItem();
+                im.setTitle( cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)));
+                im.setPath((cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))));
+                videoItemHashSet.add(im);
+            }while(cursor.moveToNext());
 
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ArrayList<ImageItem> downloadedList = new ArrayList<>(videoItemHashSet);
+        return downloadedList;
+    }
 }

@@ -84,6 +84,9 @@ public class MainScreenActivity extends AppCompatActivity {
                         getAllAlbum();
                         break;
                     case 1:
+                        Intent intent = new Intent(getApplicationContext(), ListPhotoActivity.class);
+                        intent.putExtra(MainScreenActivity.ALBUM_NAME, "VIDEO");
+                        startActivity(intent);
                         break;
                     case 2:
                         setDataToGridView(arr);
