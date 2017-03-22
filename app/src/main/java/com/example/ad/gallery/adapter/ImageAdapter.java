@@ -42,7 +42,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(layoutResourceId, parent, false);
@@ -86,7 +86,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewPhotoActivity.class);
-                intent.putExtra("PATH",item.getPath());
+                intent.putExtra("position", position);
                 context.startActivity(intent);
             }
         });
