@@ -50,8 +50,8 @@ public class ListPhotoActivity extends AppCompatActivity {
      */
     private ArrayList<ImageItem> getData() {
         String albumName = getIntent().getStringExtra(MainScreenActivity.ALBUM_NAME);
-        ImageDAO imageDAO = new ImageDAO();
-        imageDAO.gettAllImages(this);
+        ImageDAO imageDAO = new ImageDAO(this);
+        imageDAO.getAllImages(this);
         ArrayList<ImageItem> value = (ArrayList<ImageItem>) imageDAO.albumMap.get(albumName);
         Log.i(className, "Load data succesfull");
         return value;

@@ -31,13 +31,15 @@ import java.util.Locale;
 public class ImageDAO {
 
     String extention = ".jpg";
-
+    Context context;
     public HashMap<String, ArrayList<ImageItem>> albumMap = new HashMap<>();
+    public HashMap<String, String> mapLocation = new HashMap<>();
 
-    public ImageDAO() {
+    public ImageDAO(Context context) {
 
         //get image from sdcard
 
+        this.context = context;
 
     }
 
@@ -63,7 +65,7 @@ public class ImageDAO {
         }
     }
 
-    public ArrayList<ImageItem> gettAllImages(Activity activity) {
+    public ArrayList<ImageItem> getAllImages(Activity activity) {
 
         //Remove older images to avoid copying same image twice
         Uri uri;
@@ -168,6 +170,26 @@ public class ImageDAO {
         return allImages;
     }
 
+    void getImageLocation(String path) {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(path);
+            float[] latLong = new float[2];
+            boolean hasLatLong = exif.getLatLong(latLong);
+
+            if (hasLatLong) {
+                String country = getCountryName(new Float(latLong[0]).doubleValue(), new Float(latLong[1]).doubleValue());
+                System.out.println("Latitude: " + new Float(latLong[0]).doubleValue());
+                System.out.println("Longitude: " + new Float(latLong[1]).doubleValue());
+                if (!mapLocation.containsKey(country)) {
+                    mapLocation.put(country, path);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     String ReadExif(String file) {
         String exif = "Exif: " + file;
         try {
@@ -201,7 +223,7 @@ public class ImageDAO {
     }
 
     // get location image follow latitude and longitude
-    public static String getCountryName(Context context, double latitude, double longitude) {
+    public String getCountryName(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> addresses = null;
         try {
@@ -221,7 +243,7 @@ public class ImageDAO {
 
     //
     public void getAlbumByTime(Activity activity) {
-        ArrayList<ImageItem>  allImages = gettAllImages(activity);
+        ArrayList<ImageItem>  allImages = getAllImages(activity);
         //Sort by date time
         Collections.sort(allImages, new Comparator<ImageItem>() {
             @Override
@@ -242,7 +264,7 @@ public class ImageDAO {
                 arrOfKey.add(item);
             } else {
                 if (!item.isSameGroup(arrOfKey.get(0), 0)) {
-                    SimpleDateFormat df = new SimpleDateFormat(yyyy, MMM);
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy, MMM");
                     String key = df.format(arrOfKey.get(0).getDate());
                     //
                     albumMap.put(key, arrOfKey);
@@ -253,7 +275,7 @@ public class ImageDAO {
             }
         }
         if (arrOfKey.size() > 0) {
-            SimpleDateFormat df = new SimpleDateFormat(yyyy, MMM);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy, MMM");
             String key = df.format(arrOfKey.get(0).getDate());
             //
             albumMap.put(key, arrOfKey);

@@ -33,15 +33,17 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class MainScreenActivity extends AppCompatActivity {
+
     public final static String ALBUM_NAME = "AlbumName";
     int CAMERA_PIC_REQUEST = 1001;
     ArrayList<Album> arr = new ArrayList<>();
+    ArrayList<Album> arrLocation = new ArrayList<>();
     String m_Text;
     FloatingActionButton fab;
     FloatingActionButton fab2;
     private GridView gridView;
     private AlbumAdapter gridAdapter;
-    ImageDAO imgDAO = new ImageDAO();
+    ImageDAO imgDAO;
 
 
     @Override
@@ -52,6 +54,9 @@ public class MainScreenActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.drawable.ic_action_icon);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        imgDAO = new ImageDAO(this);
+        imgDAO.getAllImages(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +77,22 @@ public class MainScreenActivity extends AppCompatActivity {
         navigationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        setDataToGridView(arr);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        setDataToGridView(arrLocation);
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
                 Toast.makeText(MainScreenActivity.this,
                         "you selected: " + position,
                         Toast.LENGTH_SHORT).show();
@@ -83,8 +104,6 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
 
-        imgDAO.gettAllImages(this);
-
         gridView = (GridView) findViewById(R.id.gridview);
         for (Map.Entry alb : imgDAO.albumMap.entrySet()) {
             String key = alb.getKey().toString();
@@ -94,8 +113,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 arr.add(album);
             }
         }
-        gridAdapter = new AlbumAdapter(this, R.layout.grid_albumitem_layout, arr);
-        gridView.setAdapter(gridAdapter);
+        setDataToGridView(arr);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -104,10 +122,16 @@ public class MainScreenActivity extends AppCompatActivity {
         });
     }
 
+    void setDataToGridView(ArrayList<Album> arrAlbum) {
+        gridAdapter = new AlbumAdapter(this, R.layout.grid_albumitem_layout, arrAlbum);
+        gridAdapter.notifyDataSetChanged();
+        gridView.setAdapter(gridAdapter);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        imgDAO.gettAllImages(this);
+        imgDAO.getAllImages(this);
     }
 
     void inputAlbum() {
