@@ -89,7 +89,7 @@ public class ListPhotoActivity extends AppCompatActivity {
             }
         });
         // Display to GridView
-        GridView gridView = (GridView) findViewById(R.id.gridview);
+        GridView gridView = (GridView) findViewById(R.id.gridViewImage);
         //
         ImageAdapter gridAdapter = new ImageAdapter(this, R.layout.image_layout, data);
         gridView.setAdapter(gridAdapter);

@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,8 @@ import com.example.ad.gallery.model.Album;
 import com.example.ad.gallery.model.ImageItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 
 public class MainScreenActivity extends AppCompatActivity {
@@ -78,7 +81,7 @@ public class MainScreenActivity extends AppCompatActivity {
         navigationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                switch (position) {
                     case 0:
                         setDataToGridView(arr);
                         break;
@@ -106,11 +109,22 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
 
-        gridView = (GridView) findViewById(R.id.gridview);
+        gridView = (GridView) findViewById(R.id.gridViewAlbum);
         for (Map.Entry alb : imgDAO.albumMap.entrySet()) {
             String key = alb.getKey().toString();
             ArrayList<ImageItem> value = (ArrayList<ImageItem>) alb.getValue();
             if (!value.isEmpty()) {
+                Collections.sort(value, new Comparator<ImageItem>() {
+                    @Override
+                    public int compare(ImageItem t1, ImageItem t2) {
+                        try {
+                            return t2.getDate().compareTo(t1.getDate());
+                        } catch (Exception ex) {
+                            Log.e("DAO", "Compare date fail", ex);
+                            return 0;
+                        }
+                    }
+                });
                 Album album = new Album(key, value.get(0).getPath());
                 arr.add(album);
             }
@@ -123,7 +137,8 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
     }
-    void getAlbumTime(){
+
+    void getAlbumTime() {
         imgDAO.getAlbumByTime(this);
         arr.clear();
         for (Map.Entry alb : imgDAO.albumMap.entrySet()) {
@@ -136,8 +151,9 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         setDataToGridView(arr);
     }
+
     void setDataToGridView(ArrayList<Album> arrAlbum) {
-        gridAdapter = new AlbumAdapter(this, R.layout.grid_albumitem_layout, arrAlbum);
+        gridAdapter = new AlbumAdapter(this, R.layout.albumitem_layout, arrAlbum);
         gridAdapter.notifyDataSetChanged();
         gridView.setAdapter(gridAdapter);
     }

@@ -59,7 +59,6 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
             }
         }
 
-
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

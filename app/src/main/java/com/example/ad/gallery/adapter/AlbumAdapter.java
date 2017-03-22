@@ -41,7 +41,7 @@ public class AlbumAdapter extends ArrayAdapter {
 
         View row = inflater.inflate(layoutResourceId, parent, false);
         TextView imageTitle = (TextView) row.findViewById(R.id.txtAlbum);
-        ImageView image = (ImageView) row.findViewById(R.id.albumview);
+        ImageView image = (ImageView) row.findViewById(R.id.albumView);
 
         final Album item = arrayList.get(position);
         imageTitle.setText(item.getName());

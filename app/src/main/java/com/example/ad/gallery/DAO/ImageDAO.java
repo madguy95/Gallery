@@ -100,6 +100,7 @@ public class ImageDAO {
             ImageItem imageItem = new ImageItem();
             imageItem.setTitle(imageName);
             imageItem.setPath(absolutePathOfImage);
+            imageItem.setDate(new Date(new File(absolutePathOfImage).lastModified()));
             allImages.add(imageItem);
         }
 
