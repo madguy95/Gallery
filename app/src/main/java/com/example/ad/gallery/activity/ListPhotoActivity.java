@@ -27,6 +27,7 @@ public class ListPhotoActivity extends AppCompatActivity {
     private final String className = "ListPoto";
     GridView gridView;
     ArrayList<ImageItem> data;
+    static ImageAdapter gridAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,14 @@ public class ListPhotoActivity extends AppCompatActivity {
         //
         DispayGroup();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -101,7 +110,7 @@ public class ListPhotoActivity extends AppCompatActivity {
         // Display to GridView
         GridView gridView = (GridView) findViewById(R.id.gridViewImage);
         //
-        ImageAdapter gridAdapter = new ImageAdapter(this, R.layout.image_layout, data);
+        gridAdapter = new ImageAdapter(this, R.layout.image_layout, data);
         gridView.setAdapter(gridAdapter);
         // Set onclick Listener
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -1,5 +1,8 @@
 package com.example.ad.gallery.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,8 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.ad.gallery.R;
+import com.example.ad.gallery.adapter.AlbumAdapter;
+
+import java.io.File;
 
 public class ViewPhotoActivity extends AppCompatActivity {
 
@@ -87,15 +94,47 @@ public class ViewPhotoActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.action_detail){
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("PATH",path);
+            startActivity(intent);
+
            return true;
         }
+
         if(id == R.id.action_delete){
+
+            AlertDialog.Builder adb = new AlertDialog.Builder(this);
+            adb.setMessage("Are you sure to delete?");
+            adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    File file = new File(path);
+                    boolean deleted = file.delete();
+                    if (deleted) {
+                        MainScreenActivity.gridAdapter.notifyDataSetChanged();
+                        ListPhotoActivity.gridAdapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Delete fail", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            adb.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            adb.create().show();
+
             return true;
         }
+
         if (id == android.R.id.home) {
             finish();
             return true;
         }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;

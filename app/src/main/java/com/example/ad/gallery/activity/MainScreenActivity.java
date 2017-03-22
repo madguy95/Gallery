@@ -45,7 +45,7 @@ public class MainScreenActivity extends AppCompatActivity {
     FloatingActionButton fab;
     FloatingActionButton fab2;
     private GridView gridView;
-    private AlbumAdapter gridAdapter;
+    static AlbumAdapter gridAdapter;
     ImageDAO imgDAO;
 
 
