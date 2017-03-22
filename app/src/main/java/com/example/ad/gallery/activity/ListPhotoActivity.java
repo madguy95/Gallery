@@ -3,6 +3,7 @@ package com.example.ad.gallery.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +29,7 @@ public class ListPhotoActivity extends AppCompatActivity {
     GridView gridView;
     ArrayList<ImageItem> data;
     static ImageAdapter gridAdapter;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,18 @@ public class ListPhotoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        fab = (FloatingActionButton) findViewById(R.id.flabExit);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // select cancel
+                ImageAdapter.checked = false;
+                gridAdapter.notifyDataSetChanged();
+                view.setVisibility(View.INVISIBLE);
+                view.setEnabled(false);
+            }
+        });
         // get List Images
         data = getData();
         //
@@ -64,6 +78,10 @@ public class ListPhotoActivity extends AppCompatActivity {
 
         if(id == R.id.action_selectImage){
             // code show checkbox here
+            ImageAdapter.checked = true;
+            gridAdapter.notifyDataSetChanged();
+            fab.setEnabled(true);
+            fab.setVisibility(View.VISIBLE);
             return true;
         }
         if (item.getItemId() == android.R.id.home) {

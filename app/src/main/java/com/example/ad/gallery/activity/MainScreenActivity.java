@@ -70,7 +70,7 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        fab2.hide();
+        fab2.setEnabled(false);
         SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.category, R.layout.spinner_dropdown_item);
         Spinner navigationSpinner = new Spinner(getSupportActionBar().getThemedContext());
         navigationSpinner.setAdapter(spinnerAdapter);
