@@ -95,10 +95,6 @@ public class ViewPhotoActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id == R.id.action_detail){
-
-           return true;
-        }
         try {
             if (id == R.id.action_detail) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(this);
