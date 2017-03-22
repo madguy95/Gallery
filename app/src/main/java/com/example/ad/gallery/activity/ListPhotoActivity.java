@@ -71,7 +71,10 @@ public class ListPhotoActivity extends AppCompatActivity {
         String albumName = getIntent().getStringExtra(MainScreenActivity.ALBUM_NAME);
         ImageDAO imageDAO = new ImageDAO(this);
         if (albumName.equals("VIDEO")) {
-            return imageDAO.getAllMedia();
+            ArrayList<ImageItem> videos = imageDAO.getAllMedia();
+            Log.i(className, "Load data succesfull : " + videos.size());
+            Toast.makeText(this, "Load video : " + videos.size(), Toast.LENGTH_SHORT).show();
+            return videos;
         } else if (albumName.contains(",")) {
             imageDAO.getAlbumByTime(this);
         } else {

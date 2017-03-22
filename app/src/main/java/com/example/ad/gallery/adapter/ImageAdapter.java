@@ -51,9 +51,9 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         } else {
             // Set Image of Video :
             try {
-                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(item.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
-                thumb = ThumbnailUtils.extractThumbnail(thumb, image.getWidth(),image.getHeight(), ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-                image.setImageBitmap(thumb);
+                Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(item.getPath(),
+                        MediaStore.Images.Thumbnails.MINI_KIND);
+                image.setImageBitmap(thumbnail);
             } catch (Exception ex) {
                 Log.e("ImageAdapter", "", ex);
             }
