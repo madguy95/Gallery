@@ -4,6 +4,7 @@
     android:id="@+id/activity_list_photo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#7a8184"
     tools:context="com.example.ad.gallery.activity.ListPhotoActivity">
 
     <GridView

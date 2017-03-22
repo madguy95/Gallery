@@ -179,7 +179,7 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                Album album = new Album(m_Text, arr.get(0).getTitle());
+                Album album = new Album(m_Text, null);
                 arr.add(album);
                 gridAdapter.notifyDataSetChanged();
 

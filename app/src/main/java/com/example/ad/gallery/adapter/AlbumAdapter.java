@@ -18,6 +18,8 @@ import com.example.ad.gallery.activity.ListPhotoActivity;
 
 import java.util.ArrayList;
 
+import static com.example.ad.gallery.R.*;
+
 /**
  * Created by AD on 08/03/2017.
  */
@@ -26,7 +28,7 @@ public class AlbumAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResourceId;
     private ArrayList<Album> arrayList = new ArrayList<>();
-
+    static int defaultImage = drawable.ic_action_icon;
     public AlbumAdapter(Context context, int resource, ArrayList<Album> objects) {
         super(context, resource, objects);
         this.context = context;
@@ -40,12 +42,17 @@ public class AlbumAdapter extends ArrayAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View row = inflater.inflate(layoutResourceId, parent, false);
-        TextView imageTitle = (TextView) row.findViewById(R.id.txtAlbum);
-        ImageView image = (ImageView) row.findViewById(R.id.albumView);
+        TextView imageTitle = (TextView) row.findViewById(id.txtAlbum);
+        ImageView image = (ImageView) row.findViewById(id.albumView);
 
         final Album item = arrayList.get(position);
         imageTitle.setText(item.getName());
-        image.setImageBitmap(resizeBitmap(item.getTitle(),image.getWidth(),image.getWidth()));
+        if(item.getTitle()!= null) {
+            image.setImageBitmap(resizeBitmap(item.getTitle(), image.getWidth(), image.getWidth()));
+
+        }else{
+            image.setImageResource(defaultImage);
+        }
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +62,6 @@ public class AlbumAdapter extends ArrayAdapter {
                 context.startActivity(intent);
             }
         });
-
         return row;
     }
     public Bitmap resizeBitmap(String photoPath, int targetW, int targetH) {
