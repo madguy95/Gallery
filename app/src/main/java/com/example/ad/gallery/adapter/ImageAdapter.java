@@ -81,7 +81,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(new File(item.getPath())), "video/mp4");
+                        intent.setDataAndType(Uri.fromFile(new File(item.getPath())), "video/*");
                         v.getContext().startActivity(intent);
                     }
                 });
