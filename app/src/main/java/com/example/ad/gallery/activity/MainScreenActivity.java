@@ -3,8 +3,10 @@ package com.example.ad.gallery.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +32,7 @@ import com.example.ad.gallery.adapter.AlbumAdapter;
 import com.example.ad.gallery.model.Album;
 import com.example.ad.gallery.model.ImageItem;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -116,6 +119,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
+        Toast.makeText(getApplicationContext(),"onCreate",Toast.LENGTH_SHORT).show();
     }
 
     void getAllAlbum(){
@@ -164,14 +168,21 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        imgDAO.getAllImages(this);
         getAllAlbum();
+        Toast.makeText(getApplicationContext(),"onResume",Toast.LENGTH_SHORT).show();
+        super.onResume();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        Toast.makeText(getApplicationContext(),"onRestart",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(getApplicationContext(),"onPause",Toast.LENGTH_SHORT).show();
     }
 
     void inputAlbum() {
@@ -230,7 +241,7 @@ public class MainScreenActivity extends AppCompatActivity {
         }
         if (id == R.id.action_camera) {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+            this.startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
             return true;
         }
 
@@ -239,11 +250,11 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == CAMERA_PIC_REQUEST && data != null && data.getExtras() != null) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-//            ImageView imageview = (ImageView) findViewById(R.id.ImageView01);
-//            imageview.setImageBitmap(image);
+//            Bitmap image = (Bitmap) data.getExtras().get("data");
+////            ImageView imageview = (ImageView) findViewById(R.id.ImageView01);
+////            imageview.setImageBitmap(image);
         }
     }
 
