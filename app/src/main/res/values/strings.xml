@@ -2,6 +2,7 @@
     <string name="app_name">Gallery</string>
     <string name="action_settings">Settings</string>
     <string name="action_camera">camera</string>
+    <string name="action_delete">Delete</string>
     <string name="action_icon">icon</string>
     <!--Category -->
     <string-array name="category">

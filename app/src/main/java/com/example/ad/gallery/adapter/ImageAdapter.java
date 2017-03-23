@@ -13,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ad.gallery.activity.ListPhotoActivity;
 import com.example.ad.gallery.model.ImageItem;
 import com.example.ad.gallery.R;
 import com.example.ad.gallery.activity.ViewPhotoActivity;
@@ -51,15 +53,14 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         //
         //TextView imageTitle = (TextView) row.findViewById(R.id.text);
         ImageView image = (ImageView) row.findViewById(R.id.imageView);
+        CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
         //
         Log.i("ImageAdapter", "Item : " +position + ":\n\t"+ item.getPath());
         String extention = ".jpg";
         if (item.getPath().endsWith(extention)) {
             if(checked){
-                CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
                 cb.setVisibility(View.VISIBLE);
             }else {
-                CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
                 cb.setVisibility(View.INVISIBLE);
             }
             image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
@@ -86,7 +87,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                     }
                 });
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//use one of overloaded setDataSource() functions to set your data source
+                //use one of overloaded setDataSource() functions to set your data source
                 retriever.setDataSource(context, Uri.fromFile(new File(item.getPath())));
                 String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                 long timeInMillisec = Long.parseLong(time );
@@ -97,6 +98,40 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 Log.e("ImageAdapter", "", ex);
             }
         }
+<<<<<<< HEAD
+        // Listener
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewPhotoActivity.class);
+                intent.putExtra("position", position);
+                context.startActivity(intent);
+            }
+        });
+=======
+>>>>>>> 406c30a5222f91d9196a00fdcac140f763c2b3d7
+        //
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CheckBox cbNew = (CheckBox) view;
+                if (cbNew.isChecked()) {
+                    try {
+                        ListPhotoActivity.selectedItem.add(item);
+                        Log.i("ImageAdapter", "Select item : " + item);
+                    } catch (Exception e) {
+                        Log.e("ImageAdapter", "Add selected arraylist fail" , e);
+                    }
+                } else {
+                    try {
+                        ListPhotoActivity.selectedItem.remove(item);
+                        Log.i("ImageAdapter", "Remove item : " + item);
+                    } catch (Exception e) {
+                        Log.e("ImageAdapter", "Remove item from arraylist fail" , e);
+                    }
+                }
+            }
+        });
         //
         return row;
     }
