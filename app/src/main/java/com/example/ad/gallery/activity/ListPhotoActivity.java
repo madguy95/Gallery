@@ -49,10 +49,7 @@ public class ListPhotoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // select cancel
-<<<<<<< HEAD
                 selectedItem = new ArrayList<ImageItem>();
-=======
->>>>>>> 406c30a5222f91d9196a00fdcac140f763c2b3d7
                 ImageAdapter.checked = false;
                 gridAdapter.notifyDataSetChanged();
                 view.setVisibility(View.INVISIBLE);
@@ -94,8 +91,8 @@ public class ListPhotoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String title = item.getTitle().toString();
-        if(title.equals(getString(R.string.select))){
+        int id = item.getItemId();
+        if(id == R.id.action_selectImage){
             Log.i(className, "Select photo start ");
             // Recreate list selected
             selectedItem = new ArrayList<>();
@@ -108,11 +105,11 @@ public class ListPhotoActivity extends AppCompatActivity {
             mIdelete.setVisible(true);
             return true;
         }
-        if (item.getItemId() == android.R.id.home) {
+        if (id == android.R.id.home) {
             this.finish();
             return true;
         }
-        if (title.equals(getString(R.string.action_delete))) {
+        if (id == R.id.action_delete_select) {
             Delete_Selected_Item();
         }
         return super.onOptionsItemSelected(item);

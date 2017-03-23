@@ -98,18 +98,6 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 Log.e("ImageAdapter", "", ex);
             }
         }
-<<<<<<< HEAD
-        // Listener
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ViewPhotoActivity.class);
-                intent.putExtra("position", position);
-                context.startActivity(intent);
-            }
-        });
-=======
->>>>>>> 406c30a5222f91d9196a00fdcac140f763c2b3d7
         //
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
