@@ -52,6 +52,8 @@ public class ListPhotoActivity extends AppCompatActivity {
                 view.setEnabled(false);
             }
         });
+        fab.setVisibility(View.INVISIBLE);
+        fab.setEnabled(false);
         // get List Images
         data = getData();
         //
