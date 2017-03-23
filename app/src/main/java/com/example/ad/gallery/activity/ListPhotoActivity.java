@@ -173,8 +173,9 @@ public class ListPhotoActivity extends AppCompatActivity {
         try {
             for (ImageItem item : selectedItem) {
                 File f = new File(item.getPath());
-                f.deleteOnExit();
+                boolean isdelete = f.delete();
                 data.remove(item);
+                selectedItem.remove(item);
                 gridAdapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
             }
