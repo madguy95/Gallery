@@ -46,7 +46,7 @@ public class ListPhotoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // select cancel
-//                ImageAdapter.checked = false;
+                ImageAdapter.checked = false;
                 gridAdapter.notifyDataSetChanged();
                 view.setVisibility(View.INVISIBLE);
                 view.setEnabled(false);
@@ -80,7 +80,7 @@ public class ListPhotoActivity extends AppCompatActivity {
 
         if(id == R.id.action_selectImage){
             // code show checkbox here
-//            ImageAdapter.checked = true;
+            ImageAdapter.checked = true;
             gridAdapter.notifyDataSetChanged();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);
