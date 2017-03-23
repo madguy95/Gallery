@@ -46,7 +46,6 @@ public class ImageDAO {
 
     private void load_image_files(File dir, ArrayList<ImageItem> hm) {
 
-
         File[] listFile = dir.listFiles();
         if (listFile != null) {
             for (int i = 0; i < listFile.length; i++) {
