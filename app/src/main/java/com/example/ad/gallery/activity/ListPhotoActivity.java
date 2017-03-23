@@ -50,7 +50,7 @@ public class ListPhotoActivity extends AppCompatActivity {
 
                 // select cancel
                 selectedItem = new ArrayList<ImageItem>();
-                ImageAdapter.checked = false;
+                gridAdapter.checked = false;
                 gridAdapter.notifyDataSetChanged();
                 view.setVisibility(View.INVISIBLE);
                 view.setEnabled(false);
@@ -97,7 +97,7 @@ public class ListPhotoActivity extends AppCompatActivity {
             // Recreate list selected
             selectedItem = new ArrayList<>();
             // code show checkbox here
-            ImageAdapter.checked = true;
+            gridAdapter.checked = true;
             gridAdapter.notifyDataSetChanged();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);

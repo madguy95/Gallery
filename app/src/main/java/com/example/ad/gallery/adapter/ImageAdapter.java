@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +35,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
     private int layoutResourceId;
     private ArrayList<ImageItem> data = new ArrayList<ImageItem>();
 
-    public static boolean checked = false;
+    public boolean checked = false;
 
     public ImageAdapter(Context context, int layoutResourceId, ArrayList<ImageItem> data) {
         super(context, layoutResourceId, data);
@@ -53,25 +54,31 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         //
         //TextView imageTitle = (TextView) row.findViewById(R.id.text);
         ImageView image = (ImageView) row.findViewById(R.id.imageView);
-        CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
+        final CheckBox cb = (CheckBox) row.findViewById(R.id.cbImage);
         //
         Log.i("ImageAdapter", "Item : " +position + ":\n\t"+ item.getPath());
         String extention = ".jpg";
         if (item.getPath().endsWith(extention)) {
+            image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
             if(checked){
                 cb.setVisibility(View.VISIBLE);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cb.setChecked(!cb.isChecked());
+                    }
+                });
             }else {
                 cb.setVisibility(View.INVISIBLE);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, ViewPhotoActivity.class);
+                        intent.putExtra("position", position);
+                        context.startActivity(intent);
+                    }
+                });
             }
-            image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ViewPhotoActivity.class);
-                    intent.putExtra("position", position);
-                    context.startActivity(intent);
-                }
-            });
         } else {
             // Set Image of Video :
             try {
@@ -99,11 +106,10 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
             }
         }
         //
-        cb.setOnClickListener(new View.OnClickListener() {
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                CheckBox cbNew = (CheckBox) view;
-                if (cbNew.isChecked()) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
                     try {
                         ListPhotoActivity.selectedItem.add(item);
                         Log.i("ImageAdapter", "Select item : " + item);

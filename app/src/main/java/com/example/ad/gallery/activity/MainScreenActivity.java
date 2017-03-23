@@ -181,6 +181,9 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        arr.clear();
+        gridAdapter.clear();
+        gridAdapter.notifyDataSetChanged();
         super.onPause();
         Toast.makeText(getApplicationContext(),"onPause",Toast.LENGTH_SHORT).show();
     }
