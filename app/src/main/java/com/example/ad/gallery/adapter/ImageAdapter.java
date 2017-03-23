@@ -64,12 +64,28 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 cb.setVisibility(View.INVISIBLE);
             }
             image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ViewPhotoActivity.class);
+                    intent.putExtra("position", position);
+                    context.startActivity(intent);
+                }
+            });
         } else {
             // Set Image of Video :
             try {
                 Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(item.getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 image.setImageBitmap(thumbnail);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(new File(item.getPath())), "video/mp4");
+                        v.getContext().startActivity(intent);
+                    }
+                });
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 //use one of overloaded setDataSource() functions to set your data source
                 retriever.setDataSource(context, Uri.fromFile(new File(item.getPath())));
@@ -82,6 +98,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 Log.e("ImageAdapter", "", ex);
             }
         }
+<<<<<<< HEAD
         // Listener
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +108,8 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 context.startActivity(intent);
             }
         });
+=======
+>>>>>>> 406c30a5222f91d9196a00fdcac140f763c2b3d7
         //
         cb.setOnClickListener(new View.OnClickListener() {
             @Override

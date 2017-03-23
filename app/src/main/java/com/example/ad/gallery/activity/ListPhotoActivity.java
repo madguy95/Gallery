@@ -49,7 +49,10 @@ public class ListPhotoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // select cancel
+<<<<<<< HEAD
                 selectedItem = new ArrayList<ImageItem>();
+=======
+>>>>>>> 406c30a5222f91d9196a00fdcac140f763c2b3d7
                 ImageAdapter.checked = false;
                 gridAdapter.notifyDataSetChanged();
                 view.setVisibility(View.INVISIBLE);
@@ -58,6 +61,8 @@ public class ListPhotoActivity extends AppCompatActivity {
                 mIdelete.setVisible(false);
             }
         });
+        fab.setVisibility(View.INVISIBLE);
+        fab.setEnabled(false);
         // get List Images
         fab.setVisibility(View.INVISIBLE);
         fab.setEnabled(false);
