@@ -19,6 +19,7 @@ import com.example.ad.gallery.adapter.AlbumAdapter;
 import com.example.ad.gallery.adapter.ImageAdapter;
 import com.example.ad.gallery.model.ImageItem;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,8 +29,10 @@ public class ListPhotoActivity extends AppCompatActivity {
     private final String className = "ListPoto";
     GridView gridView;
     static ArrayList<ImageItem> data;
+    public static ArrayList<ImageItem> selectedItem;
     static ImageAdapter gridAdapter;
     FloatingActionButton fab;
+    MenuItem mIdelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +49,21 @@ public class ListPhotoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // select cancel
-//                ImageAdapter.checked = false;
+                selectedItem = new ArrayList<ImageItem>();
+                ImageAdapter.checked = false;
                 gridAdapter.notifyDataSetChanged();
                 view.setVisibility(View.INVISIBLE);
                 view.setEnabled(false);
+                // inVisible delete action
+                mIdelete.setVisible(false);
             }
         });
         // get List Images
+        fab.setVisibility(View.INVISIBLE);
+        fab.setEnabled(false);
+        //
+        selectedItem = new ArrayList<>();
+        //
         data = getData();
         //
         DispayGroup();
@@ -69,24 +80,35 @@ public class ListPhotoActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.memu_listphoto, menu);
+        mIdelete = menu.getItem(0);
+        if (mIdelete.getTitle().equals(getString(R.string.action_delete))) {
+            mIdelete.setVisible(false);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.action_selectImage){
+        String title = item.getTitle().toString();
+        if(title.equals(getString(R.string.select))){
+            Log.i(className, "Select photo start ");
+            // Recreate list selected
+            selectedItem = new ArrayList<>();
             // code show checkbox here
-//            ImageAdapter.checked = true;
+            ImageAdapter.checked = true;
             gridAdapter.notifyDataSetChanged();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);
+            //Show delete
+            mIdelete.setVisible(true);
             return true;
         }
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
+        }
+        if (title.equals(getString(R.string.action_delete))) {
+            Delete_Selected_Item();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -145,4 +167,18 @@ public class ListPhotoActivity extends AppCompatActivity {
         Log.i(className, "Display data succesfull");
     }
 
+    private void Delete_Selected_Item() {
+        try {
+            for (ImageItem item : selectedItem) {
+                File f = new File(item.getPath());
+                f.deleteOnExit();
+                data.remove(item);
+                gridAdapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e(className, "Delete Item fail", e);
+            Toast.makeText(getApplicationContext(), "Deleted Fail", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
