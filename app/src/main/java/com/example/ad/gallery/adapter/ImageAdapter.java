@@ -113,14 +113,6 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
             });
         }else {
             cb.setVisibility(View.INVISIBLE);
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, ViewPhotoActivity.class);
-                    intent.putExtra("position", position);
-                    context.startActivity(intent);
-                }
-            });
         }
         //
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
