@@ -50,6 +50,7 @@ public class MainScreenActivity extends AppCompatActivity {
     private GridView gridView;
     static AlbumAdapter gridAdapter;
     ImageDAO imgDAO;
+    Spinner navigationSpinner;
 
 
     @Override
@@ -75,7 +76,7 @@ public class MainScreenActivity extends AppCompatActivity {
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab2.setEnabled(false);
         SpinnerAdapter spinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.category, R.layout.spinner_dropdown_item);
-        Spinner navigationSpinner = new Spinner(getSupportActionBar().getThemedContext());
+        navigationSpinner = new Spinner(getSupportActionBar().getThemedContext());
         navigationSpinner.setAdapter(spinnerAdapter);
         toolbar.addView(navigationSpinner, 0);
 
@@ -102,9 +103,9 @@ public class MainScreenActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                Toast.makeText(MainScreenActivity.this,
-                        "you selected: " + position,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainScreenActivity.this,
+//                        "you selected: " + position,
+//                        Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -119,7 +120,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        Toast.makeText(getApplicationContext(),"onCreate",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"onCreate",Toast.LENGTH_SHORT).show();
     }
 
     void getAllAlbum(){
@@ -168,15 +169,16 @@ public class MainScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        navigationSpinner.setSelection(0);
         getAllAlbum();
-        Toast.makeText(getApplicationContext(),"onResume",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"onResume",Toast.LENGTH_SHORT).show();
         super.onResume();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(getApplicationContext(),"onRestart",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"onRestart",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -185,7 +187,7 @@ public class MainScreenActivity extends AppCompatActivity {
         gridAdapter.clear();
         gridAdapter.notifyDataSetChanged();
         super.onPause();
-        Toast.makeText(getApplicationContext(),"onPause",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"onPause",Toast.LENGTH_SHORT).show();
     }
 
     void inputAlbum() {

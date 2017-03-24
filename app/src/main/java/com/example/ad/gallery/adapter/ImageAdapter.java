@@ -73,6 +73,15 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(item.getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 image.setImageBitmap(thumbnail);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(new File(item.getPath())), "video/*");
+                        v.getContext().startActivity(intent);
+                    }
+                });
+
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 //use one of overloaded setDataSource() functions to set your data source
                 retriever.setDataSource(context, Uri.fromFile(new File(item.getPath())));
