@@ -67,6 +67,15 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         String extention = ".jpg";
         if (item.getPath().endsWith(extention)) {
             image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ViewPhotoActivity.class);
+                    intent.putExtra("position", position);
+                    context.startActivity(intent);
+                }
+            });
+
         } else {
             // Set Image of Video :
             try {
