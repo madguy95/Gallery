@@ -8,9 +8,9 @@
     <string-array name="category">
         <item>Album</item>
         <item>Video</item>
-        <item>Location</item>
+        <!--<item>Location</item>-->
         <item>Time</item>
-        <item>Favorite</item>
+        <!--<item>Favorite</item>-->
     </string-array>
     <string name="title_activity_view">ViewActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>

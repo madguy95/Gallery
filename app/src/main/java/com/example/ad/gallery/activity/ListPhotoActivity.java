@@ -29,7 +29,7 @@ public class ListPhotoActivity extends AppCompatActivity {
     private final String className = "ListPoto";
     GridView gridView;
     static ArrayList<ImageItem> data;
-    public static ArrayList<ImageItem> selectedItem;
+
     static ImageAdapter gridAdapter;
     FloatingActionButton fab;
     MenuItem mIdelete;
@@ -49,7 +49,6 @@ public class ListPhotoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // select cancel
-                selectedItem = new ArrayList<ImageItem>();
                 gridAdapter.checked = false;
                 gridAdapter.notifyDataSetChanged();
                 view.setVisibility(View.INVISIBLE);
@@ -64,7 +63,6 @@ public class ListPhotoActivity extends AppCompatActivity {
         fab.setVisibility(View.INVISIBLE);
         fab.setEnabled(false);
         //
-        selectedItem = new ArrayList<>();
         //
         data = getData();
         //
@@ -94,8 +92,6 @@ public class ListPhotoActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.action_selectImage){
             Log.i(className, "Select photo start ");
-            // Recreate list selected
-            selectedItem = new ArrayList<>();
             // code show checkbox here
             gridAdapter.checked = true;
             gridAdapter.notifyDataSetChanged();
@@ -171,14 +167,13 @@ public class ListPhotoActivity extends AppCompatActivity {
 
     private void Delete_Selected_Item() {
         try {
-            for (ImageItem item : selectedItem) {
+            for (ImageItem item : gridAdapter.selectedItem) {
                 File f = new File(item.getPath());
                 boolean isdelete = f.delete();
                 data.remove(item);
-                selectedItem.remove(item);
-                gridAdapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
             }
+            gridAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.e(className, "Delete Item fail", e);
             Toast.makeText(getApplicationContext(), "Deleted Fail", Toast.LENGTH_SHORT).show();

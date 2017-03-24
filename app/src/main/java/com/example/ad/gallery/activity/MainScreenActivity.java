@@ -91,14 +91,14 @@ public class MainScreenActivity extends AppCompatActivity {
                         intent.putExtra(MainScreenActivity.ALBUM_NAME, "VIDEO");
                         startActivity(intent);
                         break;
+//                    case 2:
+//                        setDataToGridView(arr);
+//                        break;
                     case 2:
-                        setDataToGridView(arr);
-                        break;
-                    case 3:
                         getAlbumTime();
                         break;
-                    case 4:
-                        break;
+//                    case 4:
+//                        break;
                     default:
                         break;
                 }

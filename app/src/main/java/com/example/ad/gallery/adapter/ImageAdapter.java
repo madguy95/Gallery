@@ -34,6 +34,7 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
     private Context context;
     private int layoutResourceId;
     private ArrayList<ImageItem> data = new ArrayList<ImageItem>();
+    public ArrayList<ImageItem> selectedItem = new ArrayList<>();
 
     public boolean checked = false;
 
@@ -42,6 +43,12 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        selectedItem.clear();
     }
 
     @Override
@@ -60,39 +67,12 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
         String extention = ".jpg";
         if (item.getPath().endsWith(extention)) {
             image.setImageBitmap(resizeBitmap(item.getPath(),image.getWidth(),image.getHeight()));
-            if(checked){
-                cb.setVisibility(View.VISIBLE);
-                image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cb.setChecked(!cb.isChecked());
-                    }
-                });
-            }else {
-                cb.setVisibility(View.INVISIBLE);
-                image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, ViewPhotoActivity.class);
-                        intent.putExtra("position", position);
-                        context.startActivity(intent);
-                    }
-                });
-            }
         } else {
             // Set Image of Video :
             try {
                 Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(item.getPath(),
                         MediaStore.Images.Thumbnails.MINI_KIND);
                 image.setImageBitmap(thumbnail);
-                image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(new File(item.getPath())), "video/*");
-                        v.getContext().startActivity(intent);
-                    }
-                });
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 //use one of overloaded setDataSource() functions to set your data source
                 retriever.setDataSource(context, Uri.fromFile(new File(item.getPath())));
@@ -105,20 +85,39 @@ public class ImageAdapter extends ArrayAdapter<ImageItem> {
                 Log.e("ImageAdapter", "", ex);
             }
         }
+        if(checked){
+            cb.setVisibility(View.VISIBLE);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    cb.setChecked(!cb.isChecked());
+                }
+            });
+        }else {
+            cb.setVisibility(View.INVISIBLE);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ViewPhotoActivity.class);
+                    intent.putExtra("position", position);
+                    context.startActivity(intent);
+                }
+            });
+        }
         //
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     try {
-                        ListPhotoActivity.selectedItem.add(item);
+                        selectedItem.add(item);
                         Log.i("ImageAdapter", "Select item : " + item);
                     } catch (Exception e) {
                         Log.e("ImageAdapter", "Add selected arraylist fail" , e);
                     }
                 } else {
                     try {
-                        ListPhotoActivity.selectedItem.remove(item);
+                        selectedItem.remove(item);
                         Log.i("ImageAdapter", "Remove item : " + item);
                     } catch (Exception e) {
                         Log.e("ImageAdapter", "Remove item from arraylist fail" , e);
