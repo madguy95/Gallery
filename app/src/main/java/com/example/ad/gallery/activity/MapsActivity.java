@@ -1,8 +1,9 @@
-package com.example.ad.gallery;
+package com.example.ad.gallery.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.example.ad.gallery.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
